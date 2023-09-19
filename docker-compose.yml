@@ -1,0 +1,45 @@
+
+services:
+  backendA:
+    container_name: backendA
+    image: douggynix/istio-demo-backend
+    build: ./backend
+    ports:
+      - 3001:3001
+    environment:
+      - BACKEND_NAME=backendA
+    networks:
+      - app-network
+
+  backendB:
+    container_name: backendB
+    image: douggynix/istio-demo-backend
+    depends_on:
+      - backendA
+    ports:
+      - 3002:3001
+    environment:
+      - BACKEND_NAME=backendB
+    networks:
+      - app-network
+
+  frontend:
+    container_name: frontend
+    image: douggynix/istio-demo-frontend
+    build: ./frontend
+    depends_on:
+      - backendA
+      - backendB
+    ports:
+      - 3000:3000
+    environment:
+      - BACKEND_A_URI=http://backendA:3001/
+      - BACKEND_B_URI=http://backendB:3001/
+    networks:
+      - app-network
+    entrypoint: ["sh", "/app/devtools/rundevserver.sh" ]
+
+networks:
+  app-network:
+    name: app-network
+    driver: bridge

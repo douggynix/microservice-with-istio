@@ -1,0 +1,95 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: mesh-demo
+  name: backenda
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: backenda
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: backenda
+        version: v1
+    spec:
+      containers:
+      - name: backenda
+        image: douggynix/istio-demo-backend
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 3001
+          protocol: TCP
+          name: backenda-port
+        env:
+          - name: BACKEND_NAME
+            value: backendA
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backenda
+  namespace: mesh-demo
+spec:
+  selector:
+    app: backenda
+    version: v1
+#  type: LoadBalancer
+  ports:
+  - port: 3001
+    protocol: TCP
+    name: tcp-node
+    targetPort: backenda-port
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: mesh-demo
+  name: backendb
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: backendb
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: backendb
+        version: v1
+    spec:
+      containers:
+      - name: backendb
+        image: douggynix/istio-demo-backend
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 3001
+          protocol: TCP
+          name: backendb-port
+        env:
+          - name: BACKEND_NAME
+            value: backendB
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backendb
+  namespace: mesh-demo
+spec:
+  selector:
+    app: backendb
+    version: v1
+#  type: LoadBalancer
+  ports:
+  - port: 3001
+    protocol: TCP
+    name: tcp-nodeb
+    targetPort: backendb-port
