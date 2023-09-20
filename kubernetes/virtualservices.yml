@@ -20,5 +20,26 @@ spec:
 #        subset: v1
         port: 
           number: 3001
-        
-
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: backendb-virtual-service
+  namespace: mesh-demo
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - mesh-demo-gateway
+  http:
+  - match:
+    - uri:
+        prefix: "/backendB"
+    rewrite:
+      uri: "/"
+    route:
+    - destination:
+        host: backendb
+#        subset: v1
+        port: 
+          number: 3001

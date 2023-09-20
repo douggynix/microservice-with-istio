@@ -1,24 +1,25 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   namespace: mesh-demo
-  name: backenda
+  name: backendb
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: backenda
+      app: backendb
       version: v1
   template:
     metadata:
       labels:
-        app: backenda
+        app: backendb
         version: v1
       annotations:
         sidecar.istio.io/rewriteAppHTTPProbers: "false"
     spec:
       containers:
-      - name: backenda
+      - name: backendb
         image: douggynix/istio-demo-backend
         resources:
           limits:
@@ -27,10 +28,10 @@ spec:
         ports:
         - containerPort: 3001
           protocol: TCP
-          name: backenda-port
+          name: backendb-port
         env:
           - name: BACKEND_NAME
-            value: backendA
+            value: backendB
         readinessProbe:
           initialDelaySeconds: 1
           periodSeconds: 2
@@ -44,11 +45,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: backenda
+  name: backendb
   namespace: mesh-demo
 spec:
   selector:
-    app: backenda
+    app: backendb
     version: v1
 #  type: LoadBalancer
   ports:
