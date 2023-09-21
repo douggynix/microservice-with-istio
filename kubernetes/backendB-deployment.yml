@@ -3,7 +3,9 @@ kind: Deployment
 metadata:
   namespace: mesh-demo
   name: backendb
-
+  labels:
+    app: backendb
+    version: v1
 spec:
   replicas: 1
   selector:
@@ -28,7 +30,6 @@ spec:
         ports:
         - containerPort: 3001
           protocol: TCP
-          name: backendb-port
         env:
           - name: BACKEND_NAME
             value: backendB
@@ -36,7 +37,7 @@ spec:
           initialDelaySeconds: 1
           periodSeconds: 2
           successThreshold: 1
-          failureThreshold: 30
+          failureThreshold: 25
           httpGet:
             path: /
             port: 3001
@@ -48,15 +49,14 @@ metadata:
   name: backendb
   namespace: mesh-demo
   labels:
-    app: backenda
-    service: backenda
+    app: backendb
+    service: backendb
 spec:
   selector:
     app: backendb
-    version: v1
 #  type: LoadBalancer
   ports:
-  - port: 3001
+  - name: node-tcp
+    port: 3001
     protocol: TCP
-    name: nodejs-port
-    targetPort: backend-port
+    
