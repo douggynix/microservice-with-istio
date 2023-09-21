@@ -2,6 +2,30 @@
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
+  name: frontend
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - mesh-demo-gateway
+  http:
+    - match:
+        - uri:
+            prefix: /mesh-demo
+        - uri:
+            prefix: /static
+          
+#      rewrite:
+#        uri: /
+      route:
+        - destination:
+            host: frontend
+            port:
+              number: 3000
+---      
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
   name: backenda
   namespace: mesh-demo
 spec:

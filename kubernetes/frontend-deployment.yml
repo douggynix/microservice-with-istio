@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  namespace: mesh-demo
+  labels:
+    app: frontend
+    version: v1
+spec:
+  selector:
+    matchLabels:
+      app: frontend
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: frontend
+        version: v1
+    spec:
+      containers:
+      - name: frontend
+        image: douggynix/istio-demo-frontend
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 3000
+        readinessProbe:
+          initialDelaySeconds: 1
+          periodSeconds: 5
+          successThreshold: 1
+          failureThreshold: 25
+          httpGet:
+            path: /
+            port: 3000
+            scheme: HTTP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+  namespace: mesh-demo
+  labels:
+    app: frontend
+    service: frontend
+spec:
+  selector:
+    app: frontend
+  ports:
+  - name: react-tcp
+    port: 3000
+    protocol: TCP
+
