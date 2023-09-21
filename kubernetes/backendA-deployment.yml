@@ -3,6 +3,9 @@ kind: Deployment
 metadata:
   namespace: mesh-demo
   name: backenda
+  labels:
+    app: backenda
+    version: v1
 spec:
   replicas: 1
   selector:
@@ -14,8 +17,8 @@ spec:
       labels:
         app: backenda
         version: v1
-      annotations:
-        sidecar.istio.io/rewriteAppHTTPProbers: "false"
+#      annotations:
+#        sidecar.istio.io/rewriteAppHTTPProbers: "false"
     spec:
       containers:
       - name: backenda
@@ -27,7 +30,6 @@ spec:
         ports:
         - containerPort: 3001
           protocol: TCP
-          name: backenda-port
         env:
           - name: BACKEND_NAME
             value: backendA
@@ -35,7 +37,7 @@ spec:
           initialDelaySeconds: 1
           periodSeconds: 2
           successThreshold: 1
-          failureThreshold: 30
+          failureThreshold: 25
           httpGet:
             path: /
             port: 3001
@@ -46,13 +48,15 @@ kind: Service
 metadata:
   name: backenda
   namespace: mesh-demo
+  labels:
+    app: backenda
+    service: backenda
 spec:
   selector:
     app: backenda
-    version: v1
 #  type: LoadBalancer
   ports:
-  - port: 3001
+  - name: node-tcp
+    port: 3001
     protocol: TCP
-    name: nodejs-port
-    targetPort: backend-port
+    

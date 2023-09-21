@@ -1,9 +1,9 @@
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   namespace: mesh-demo
   name: backendb
+
 spec:
   replicas: 1
   selector:
@@ -15,8 +15,8 @@ spec:
       labels:
         app: backendb
         version: v1
-      annotations:
-        sidecar.istio.io/rewriteAppHTTPProbers: "false"
+#      annotations:
+#        sidecar.istio.io/rewriteAppHTTPProbers: "false"
     spec:
       containers:
       - name: backendb
@@ -47,6 +47,9 @@ kind: Service
 metadata:
   name: backendb
   namespace: mesh-demo
+  labels:
+    app: backenda
+    service: backenda
 spec:
   selector:
     app: backendb

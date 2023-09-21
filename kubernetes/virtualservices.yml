@@ -1,45 +1,23 @@
+# See more at https://istio.io/docs/reference/config/networking/virtual-service/
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
-  name: backenda-virtual-service
+  name: backenda
   namespace: mesh-demo
 spec:
   hosts:
   - "*"
   gateways:
-  - mesh-demo-gateway
+    - mesh-demo-gateway
   http:
-  - match:
-    - uri:
-        prefix: "/backendA"
-    rewrite:
-      uri: "/"
-    route:
-    - destination:
-        host: backenda
-#        subset: v1
-        port: 
-          number: 3001
----
-apiVersion: networking.istio.io/v1alpha3
-kind: VirtualService
-metadata:
-  name: backendb-virtual-service
-  namespace: mesh-demo
-spec:
-  hosts:
-  - "*"
-  gateways:
-  - mesh-demo-gateway
-  http:
-  - match:
-    - uri:
-        prefix: "/backendB"
-    rewrite:
-      uri: "/"
-    route:
-    - destination:
-        host: backendb
-#        subset: v1
-        port: 
-          number: 3001
+    - match:
+        - uri:
+            prefix: "/backendA"
+      rewrite:
+        uri: "/"
+      route:
+      - destination:
+#          subset: v1
+          host: backenda
+          port:
+            number: 3001
