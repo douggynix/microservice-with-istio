@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js --dev",
+    "dev": "npx concurrently \"cross-env BACKEND_NAME=BackendA nodemon index.js\" \"cross-env BACKEND_NAME=BackendB BACKEND_PORT=3002 nodemon index.js\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -17,6 +17,8 @@
     "uuid": "^9.0.1"
   },
   "devDependencies": {
+    "concurrently": "^8.2.1",
+    "cross-env": "^7.0.3",
     "nodemon": "^3.0.1"
   }
 }
