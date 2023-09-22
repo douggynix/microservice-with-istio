@@ -19,6 +19,7 @@ spec:
 #        uri: /
       route:
         - destination:
+            subset: v1
             host: frontend
             port:
               number: 3000
@@ -41,7 +42,7 @@ spec:
         uri: "/"
       route:
       - destination:
-#          subset: v1
+          subset: v1
           host: backenda
           port:
             number: 3001
@@ -65,6 +66,6 @@ spec:
     route:
     - destination:
         host: backendb
-#        subset: v1
+ #       subset: v1
         port: 
           number: 3001
