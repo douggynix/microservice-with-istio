@@ -1,4 +1,6 @@
 #!/bin/sh
-echo "starting proxy"
-node "/app/devtools/proxyserver.js" &
-serve -s "/app/build" -p 3030
+npm install -g pnpm
+echo "Install Dev dependencies"
+pnpm install
+echo "Starting server for frontend in dev mode"
+pnpm start

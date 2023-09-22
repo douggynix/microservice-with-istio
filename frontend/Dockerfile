@@ -14,8 +14,8 @@ RUN rm -rf node_modules ~/.cache/pnpm ~/.npm ~/.local/share/pnpm
 
 RUN ls -al
 
-RUN pnpm install -D
+#RUN pnpm install -D
 
-RUN npm uninstall -g pnpm
+#RUN npm uninstall -g pnpm
 
-ENTRYPOINT [ "serve", "-s", "/app/build" ]
+ENTRYPOINT [ "serve", "-s", "/app/build/static" ]

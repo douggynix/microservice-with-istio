@@ -37,7 +37,7 @@ services:
       - BACKEND_B_URI=http://backendB:3001/
     networks:
       - app-network
-    entrypoint: ["sh", "/app/devtools/rundevserver.sh" ]
+    entrypoint: ["/app/devtools/rundevserver.sh" ]
 
 networks:
   app-network:
