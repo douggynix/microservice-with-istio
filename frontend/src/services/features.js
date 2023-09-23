@@ -1,14 +1,11 @@
 import axios from 'axios'
 
 const getFeatures = async () => {
-    const ENDPOINTS = ['/backendA', '/backendB',]
-    let features = []
-    for(let i=0; i< ENDPOINTS.length; i++ ){
-        const res = await axios.get(ENDPOINTS[i]);
-        const feature = res.data
-        features = [...features, feature ]
-    }
-    return features;
+    return  await Promise.all([ 
+                            await axios.get('/backendA') , 
+                            await axios.get('/backendB')
+                        ])
+                    .then( responses => responses.map( res => res.data))
 }
 
 const featureService = {getFeatures}
